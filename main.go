@@ -9,12 +9,12 @@ import (
 
 
 func MakeRequest(url string) {
-  start := time.Now()
-  resp, _ := http.Get(url)
+	start := time.Now()
+	resp, _ := http.Get(url)
+	
+	secs := time.Since(start).Seconds()
+	fmt.Println("testing",secs, url,resp.StatusCode)
 
-  secs := time.Since(start).Seconds()
-
-  fmt.Sprintf("%.2f elapsed with domain: %s with response status %d", secs, url,resp.StatusCode)
 }
 
 
