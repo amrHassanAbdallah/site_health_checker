@@ -2,7 +2,7 @@ package main
 
 import (
      "fmt"
-     "os" //  is for accesing command line arguments
+//     "os" //  is for accesing command line arguments
      "net/http"// is for making HTTP requests
      "time"
 )
@@ -13,7 +13,7 @@ func MakeRequest(url string, ch chan<-string) {
   resp, _ := http.Get(url)
 
   secs := time.Since(start).Seconds()
-
+	
   ch <- fmt.Sprintf("%.2f elapsed with domain: %s with response status %d", secs, url,resp.StatusCode)
 }
 
@@ -21,11 +21,13 @@ func MakeRequest(url string, ch chan<-string) {
 func main()  {
  start := time.Now()
   ch := make(chan string)
-  for _,url := range os.Args[1:]{
+   urls := []string{"http://localhost:8010/api/slow/test/22","http://localhost:8010/api/fast/test/1","http://localhost:8010/api/fast/test/2","http://localhost:8010/api/fast/test/3","http://localhost:8010/api/slow/test/66"}
+
+  for _,url := range urls{
       go MakeRequest(url, ch)
   }
 
-  for range os.Args[1:]{
+  for range urls{
     fmt.Println(<-ch)
   }
   fmt.Printf("%.2fs elapsed\n", time.Since(start).Seconds())
